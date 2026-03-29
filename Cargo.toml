@@ -1,0 +1,22 @@
+[package]
+name = "prometheus-ecowitt-exporter"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ian Johannesen <ij@perlpimp.net>"]
+license = "MIT"
+
+[dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+warp = "0.3"
+prometheus = "0.13"
+clap = { version = "4", features = ["derive"] }
+anyhow = "1"
+regex = "1"
+url = "2"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+
+[profile.release]
+opt-level = 3
+debug = false
