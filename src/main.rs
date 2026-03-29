@@ -204,17 +204,11 @@ impl Metrics {
         )
         .expect("metric can be created");
 
-        let winddir = GaugeVec::new(
-            Opts::new("ecowitt_winddir", "Wind direction"),
-            &["station"],
-        )
-        .expect("metric can be created");
+        let winddir = GaugeVec::new(Opts::new("ecowitt_winddir", "Wind direction"), &["station"])
+            .expect("metric can be created");
 
-        let uv = GaugeVec::new(
-            Opts::new("ecowitt_uv", "UV index"),
-            &["station"],
-        )
-        .expect("metric can be created");
+        let uv = GaugeVec::new(Opts::new("ecowitt_uv", "UV index"), &["station"])
+            .expect("metric can be created");
 
         let pm25 = GaugeVec::new(
             Opts::new("ecowitt_pm25", "PM2.5 concentration"),
@@ -222,11 +216,9 @@ impl Metrics {
         )
         .expect("metric can be created");
 
-        let aqi = GaugeVec::new(
-            Opts::new("ecowitt_aqi", "Air quality index"),
-            &["station", "standard"],
-        )
-        .expect("metric can be created");
+        let aqi =
+            GaugeVec::new(Opts::new("ecowitt_aqi", "Air quality index"), &["station", "standard"])
+                .expect("metric can be created");
 
         let batterystatus = GaugeVec::new(
             Opts::new("ecowitt_batterystatus", "Battery status"),
@@ -252,11 +244,9 @@ impl Metrics {
         )
         .expect("metric can be created");
 
-        let barom = GaugeVec::new(
-            Opts::new("ecowitt_barom", "Barometer"),
-            &["station", "sensor", "unit"],
-        )
-        .expect("metric can be created");
+        let barom =
+            GaugeVec::new(Opts::new("ecowitt_barom", "Barometer"), &["station", "sensor", "unit"])
+                .expect("metric can be created");
 
         let vpd = GaugeVec::new(
             Opts::new("ecowitt_vpd", "Vapour pressure deficit"),
@@ -276,11 +266,9 @@ impl Metrics {
         )
         .expect("metric can be created");
 
-        let rain = GaugeVec::new(
-            Opts::new("ecowitt_rain", "Rainfall"),
-            &["station", "sensor", "unit"],
-        )
-        .expect("metric can be created");
+        let rain =
+            GaugeVec::new(Opts::new("ecowitt_rain", "Rainfall"), &["station", "sensor", "unit"])
+                .expect("metric can be created");
 
         let lightning = GaugeVec::new(
             Opts::new("ecowitt_lightning", "Lightning distance"),
@@ -395,7 +383,7 @@ struct Args {
     #[clap(long, default_value = "wm2")]
     irradiance_unit: String,
 
-    #[clap(long, default_value = "uk")]
+    #[clap(long, default_value = "epa")]
     aqi_standard: String,
 
     #[clap(long, default_value = "ecowitt")]
@@ -650,34 +638,20 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
                 let (label, location) = if key == "humidity" {
                     (
                         "outdoor".to_string(),
-                        config
-                            .outdoor_location
-                            .as_deref()
-                            .unwrap_or("outdoor")
-                            .to_string(),
+                        config.outdoor_location.as_deref().unwrap_or("outdoor").to_string(),
                     )
                 } else if key == "humidityin" {
                     (
                         "indoor".to_string(),
-                        config
-                            .indoor_location
-                            .as_deref()
-                            .unwrap_or("indoor")
-                            .to_string(),
+                        config.indoor_location.as_deref().unwrap_or("indoor").to_string(),
                     )
                 } else {
                     let ch = key.chars().last().unwrap_or('0');
                     let label = format!("ch{ch}");
-                    let location = config
-                        .temp_location(ch)
-                        .unwrap_or(&label)
-                        .to_string();
+                    let location = config.temp_location(ch).unwrap_or(&label).to_string();
                     (label, location)
                 };
-                metrics
-                    .humidity
-                    .with_label_values(&[station, &label, "percent", &location])
-                    .set(v);
+                metrics.humidity.with_label_values(&[station, &label, "percent", &location]).set(v);
             }
             continue;
         }
@@ -704,28 +678,17 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
                 let (label, location) = if stripped == "tempin" {
                     (
                         "indoor".to_string(),
-                        config
-                            .indoor_location
-                            .as_deref()
-                            .unwrap_or("indoor")
-                            .to_string(),
+                        config.indoor_location.as_deref().unwrap_or("indoor").to_string(),
                     )
                 } else if stripped == "temp" {
                     (
                         "outdoor".to_string(),
-                        config
-                            .outdoor_location
-                            .as_deref()
-                            .unwrap_or("outdoor")
-                            .to_string(),
+                        config.outdoor_location.as_deref().unwrap_or("outdoor").to_string(),
                     )
                 } else {
                     let ch = stripped.chars().last().unwrap_or('0');
                     let label = format!("ch{ch}");
-                    let location = config
-                        .temp_location(ch)
-                        .unwrap_or(&label)
-                        .to_string();
+                    let location = config.temp_location(ch).unwrap_or(&label).to_string();
                     (label, location)
                 };
 
@@ -760,10 +723,7 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
         if key == "vpd" {
             if let Ok(v) = raw_value.parse::<f64>() {
                 let converted = convert_pressure(v, &config.pressure_unit);
-                metrics
-                    .vpd
-                    .with_label_values(&[station, &config.pressure_unit])
-                    .set(converted);
+                metrics.vpd.with_label_values(&[station, &config.pressure_unit]).set(converted);
             }
             continue;
         }
@@ -905,14 +865,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .and(with_state(state.clone()))
         .and_then(metrics_handler);
 
-    let report_route = warp::path!("report" / String)
-        .and(warp::post())
-        .and(with_state(state))
-        .and(warp::body::content_length_limit(1024 * 64))
-        .and(warp::body::bytes().map(|bytes: warp::hyper::body::Bytes| {
-            String::from_utf8_lossy(&bytes).into_owned()
-        }))
-        .and_then(report_handler);
+    let report_route =
+        warp::path!("report" / String)
+            .and(warp::post())
+            .and(with_state(state))
+            .and(warp::body::content_length_limit(1024 * 64))
+            .and(warp::body::bytes().map(|bytes: warp::hyper::body::Bytes| {
+                String::from_utf8_lossy(&bytes).into_owned()
+            }))
+            .and_then(report_handler);
 
     let routes = version_route.or(metrics_route).or(report_route);
 

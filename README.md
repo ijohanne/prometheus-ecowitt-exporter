@@ -75,7 +75,7 @@ All configuration is via command-line flags. Metric/SI units are the default.
 | `--rain-unit` | `mm` | `mm`, `in` | Rainfall unit |
 | `--distance-unit` | `km` | `km`, `mi` | Lightning distance unit |
 | `--irradiance-unit` | `wm2` | `wm2`, `lx`, `fc` | Solar irradiance unit |
-| `--aqi-standard` | `uk` | `uk`, `epa`, `mep`, `nepm` | Air Quality Index standard |
+| `--aqi-standard` | `epa` | `uk`, `epa`, `mep`, `nepm` | Air Quality Index standard |
 | `--outdoor-location` | | | Label for outdoor sensor location |
 | `--indoor-location` | | | Label for indoor sensor location |
 | `--temp1-location` .. `--temp8-location` | | | Label for channel 1-8 temperature sensors |

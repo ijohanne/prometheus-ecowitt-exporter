@@ -71,7 +71,7 @@ in
         };
         aqiStandard = mkOption {
           type = types.str;
-          default = "uk";
+          default = "epa";
           description = ''
             AQI standard (uk, epa, mep, nepm).
           '';
