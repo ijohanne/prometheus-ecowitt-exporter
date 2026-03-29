@@ -6,6 +6,7 @@ Prometheus exporter for Ecowitt weather stations, written in Rust.
 
 - [Overview](#overview)
 - [Multi-station support](#multi-station-support)
+- [Forwarding](#forwarding)
 - [Supported hardware](#supported-hardware)
 - [CLI options](#cli-options)
 - [How to configure your weather station](#how-to-configure-your-weather-station)
@@ -32,14 +33,31 @@ Data flow:
 
 1. Ecowitt sensors submit readings to the gateway via RF
 2. The gateway aggregates data and POSTs to `/report/{station}`
-3. Prometheus scrapes `/metrics`
-4. Grafana queries Prometheus for visualisation
+3. The exporter optionally forwards the raw data to other recipients (e.g. Home Assistant)
+4. Prometheus scrapes `/metrics`
+5. Grafana queries Prometheus for visualisation
 
 ## Multi-station support
 
 Each gateway posts to a unique path, e.g. `/report/garden` or `/report/rooftop`.
 The station name from the URL is added as a `station` label on every metric,
 so a single exporter instance can serve multiple gateways without collisions.
+
+## Forwarding
+
+The exporter can relay received data to other HTTP endpoints using `--forward-url`.
+This is useful when the Ecowitt gateway only supports a single custom server destination
+but you need the data in multiple systems (e.g. Home Assistant, another exporter).
+
+- Specify `--forward-url` multiple times for multiple recipients
+- Forwarding is fire-and-forget — the exporter does not wait for or check responses
+- TLS certificate verification is disabled, so self-signed certificates are accepted
+
+```console
+prometheus-ecowitt-exporter \
+  --forward-url http://homeassistant.local:8123/api/webhook/ecowitt \
+  --forward-url https://other-server:8088/report/mystation
+```
 
 ## Supported hardware
 
@@ -79,6 +97,7 @@ All configuration is via command-line flags. Metric/SI units are the default.
 | `--outdoor-location` | | | Label for outdoor sensor location |
 | `--indoor-location` | | | Label for indoor sensor location |
 | `--temp1-location` .. `--temp8-location` | | | Label for channel 1-8 temperature sensors |
+| `--forward-url` | | | URL to forward received data to (repeatable) |
 | `--debug` | `false` | | Enable debug logging |
 
 ## How to configure your weather station
@@ -107,6 +126,9 @@ This project provides a NixOS flake with a module. Add it to your flake inputs a
     windUnit = "kmh";
     outdoorLocation = "Garden";
     tempLocations = { "1" = "Greenhouse"; "2" = "Garage"; };
+    forwardUrls = [
+      "http://homeassistant.local:8123/api/webhook/ecowitt"
+    ];
   };
 }
 ```

@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
-use prometheus::{GaugeVec, Opts, Registry};
+use prometheus::{GaugeVec, IntCounterVec, Opts, Registry};
 use regex::Regex;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -184,6 +184,8 @@ struct Metrics {
     lightning_time: GaugeVec,
     ws90: GaugeVec,
     soilmoisture: GaugeVec,
+    forward_total: IntCounterVec,
+    forward_errors: IntCounterVec,
     registry: Registry,
 }
 
@@ -300,6 +302,18 @@ impl Metrics {
         )
         .expect("metric can be created");
 
+        let forward_total = IntCounterVec::new(
+            Opts::new("ecowitt_forward_total", "Total forwarded requests"),
+            &["url"],
+        )
+        .expect("metric can be created");
+
+        let forward_errors = IntCounterVec::new(
+            Opts::new("ecowitt_forward_errors", "Failed forwarded requests"),
+            &["url"],
+        )
+        .expect("metric can be created");
+
         macro_rules! register {
             ($($metric:expr),+ $(,)?) => {
                 $(registry.register(Box::new($metric.clone())).expect("collector can be registered");)+
@@ -326,6 +340,8 @@ impl Metrics {
             lightning_time,
             ws90,
             soilmoisture,
+            forward_total,
+            forward_errors,
         );
 
         Self {
@@ -349,6 +365,8 @@ impl Metrics {
             lightning_time,
             ws90,
             soilmoisture,
+            forward_total,
+            forward_errors,
             registry,
         }
     }
@@ -421,6 +439,9 @@ struct Args {
 
     #[clap(long)]
     debug: bool,
+
+    #[clap(long)]
+    forward_url: Vec<String>,
 }
 
 impl Args {
@@ -442,6 +463,7 @@ impl Args {
 struct AppState {
     metrics: Metrics,
     config: Args,
+    http_client: reqwest::Client,
 }
 
 // WS90 piezo rain sensor mappings
@@ -825,8 +847,36 @@ async fn report_handler(
         .map(|(k, v)| (k.into_owned(), v.into_owned()))
         .collect();
 
-    let state = state.lock().expect("lock not poisoned");
-    process_report(&state, &station, &data);
+    let (forward_urls, client, forward_total, forward_errors) = {
+        let state = state.lock().expect("lock not poisoned");
+        process_report(&state, &station, &data);
+        (
+            state.config.forward_url.clone(),
+            state.http_client.clone(),
+            state.metrics.forward_total.clone(),
+            state.metrics.forward_errors.clone(),
+        )
+    };
+
+    for url in forward_urls {
+        let client = client.clone();
+        let body = body.clone();
+        let forward_total = forward_total.clone();
+        let forward_errors = forward_errors.clone();
+        tokio::spawn(async move {
+            forward_total.with_label_values(&[&url]).inc();
+            if let Err(e) = client
+                .post(&url)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .body(body)
+                .send()
+                .await
+            {
+                eprintln!("Failed to forward to {url}: {e}");
+                forward_errors.with_label_values(&[&url]).inc();
+            }
+        });
+    }
 
     Ok(warp::reply::with_status("OK", warp::http::StatusCode::OK))
 }
@@ -851,11 +901,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  IRRADIANCE_UNIT:  {}", args.irradiance_unit);
     println!("  AQI STANDARD:     {}", args.aqi_standard);
     println!("  STATION_ID:       {}", args.station_id);
+    if args.forward_url.is_empty() {
+        println!("  FORWARD_URLS:     (none)");
+    } else {
+        for url in &args.forward_url {
+            println!("  FORWARD_URL:      {url}");
+        }
+    }
+
+    let http_client = reqwest::Client::builder()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .expect("HTTP client can be created");
 
     let metrics = Metrics::new();
     let state = Arc::new(Mutex::new(AppState {
         metrics,
         config: args.clone(),
+        http_client,
     }));
 
     let version_route = warp::path::end().and(warp::get()).and_then(version_handler);

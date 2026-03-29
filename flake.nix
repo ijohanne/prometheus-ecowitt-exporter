@@ -46,6 +46,11 @@
             rustfmt.enable = true;
             clippy.enable = true;
           };
+          tools = {
+            cargo = rustToolchain;
+            clippy = rustToolchain;
+            rustfmt = rustToolchain;
+          };
         };
       in
       {

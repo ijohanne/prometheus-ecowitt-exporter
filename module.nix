@@ -104,6 +104,13 @@ in
             Map of channel number to location label, e.g. { "1" = "Garden"; "2" = "Garage"; }.
           '';
         };
+        forwardUrls = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = ''
+            List of URLs to forward received data to (fire-and-forget, no TLS verification).
+          '';
+        };
         debug = mkOption {
           type = types.bool;
           default = false;
@@ -142,6 +149,9 @@ in
         tempLocationArgs = concatStringsSep " " (
           mapAttrsToList (ch: loc: ''--temp${ch}-location "${loc}"'') cfg.tempLocations
         );
+        forwardUrlArgs = concatStringsSep " " (
+          map (url: ''--forward-url "${url}"'') cfg.forwardUrls
+        );
         wrapper = pkgs.writeShellScript "prometheus-${name}-exporter" ''
           exec ${getBin package}/bin/prometheus-ecowitt-exporter \
             --listen-address ${cfg.listenAddress} \
@@ -157,6 +167,7 @@ in
             ${optionalString (cfg.outdoorLocation != null) ''--outdoor-location "${cfg.outdoorLocation}"''} \
             ${optionalString (cfg.indoorLocation != null) ''--indoor-location "${cfg.indoorLocation}"''} \
             ${tempLocationArgs} \
+            ${forwardUrlArgs} \
             ${optionalString cfg.debug "--debug"}
         '';
       in
