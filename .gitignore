@@ -1,2 +1,4 @@
 /target
 tags
+.direnv
+.pre-commit-config.yaml

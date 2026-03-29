@@ -8,6 +8,10 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -16,6 +20,7 @@
       nixpkgs,
       flake-utils,
       rust-overlay,
+      git-hooks,
       ...
     }:
     (flake-utils.lib.eachDefaultSystem (
@@ -34,6 +39,14 @@
           cargo = rustToolchain;
           rustc = rustToolchain;
         };
+
+        pre-commit-check = git-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            rustfmt.enable = true;
+            clippy.enable = true;
+          };
+        };
       in
       {
         packages.default = rustPlatform.buildRustPackage {
@@ -43,7 +56,12 @@
           cargoLock.lockFile = ./Cargo.lock;
         };
 
+        checks = {
+          inherit pre-commit-check;
+        };
+
         devShells.default = pkgs.mkShell {
+          inherit (pre-commit-check) shellHook;
           buildInputs = with pkgs; [
             rustToolchain
           ];
