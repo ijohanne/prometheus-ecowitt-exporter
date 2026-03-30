@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.services.prometheus-ecowitt-exporter;
   name = "ecowitt";
-  package = self.packages.${pkgs.system}.default;
+  package = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   options.services.prometheus-ecowitt-exporter = with types; mkOption {
