@@ -2328,10 +2328,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_solarradiation{station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_solarradiation{station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{__name__}}",
+          "legendFormat": "Solar irradiation",
           "range": true,
           "refId": "A",
           "useBackend": false
