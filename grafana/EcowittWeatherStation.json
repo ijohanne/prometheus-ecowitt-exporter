@@ -1,14 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
   "__elements": {},
   "__requires": [
     {
@@ -93,7 +83,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -166,7 +156,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -185,7 +175,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -246,11 +236,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_humidity{container=\"ecowitt-exporter\", sensor=\"outdoor\"}",
+          "expr": "ecowitt_humidity{sensor=\"outdoor\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -265,7 +255,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -318,11 +308,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_barom{container=\"ecowitt-exporter\", sensor=\"relative\"}",
+          "expr": "ecowitt_barom{sensor=\"relative\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -337,7 +327,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -392,11 +382,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{container=\"ecowitt-exporter\", sensor=\"windspeed\"}",
+          "expr": "ecowitt_windspeed{sensor=\"windspeed\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -411,7 +401,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -466,11 +456,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{container=\"ecowitt-exporter\", sensor=\"rate\"}",
+          "expr": "ecowitt_rain{sensor=\"rate\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -485,7 +475,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -555,11 +545,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_solarradiation{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_solarradiation",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -587,7 +577,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -641,7 +631,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{container=\"ecowitt-exporter\", sensor=\"outdoor\"}",
+          "expr": "ecowitt_temp{sensor=\"outdoor\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -650,7 +640,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -660,7 +650,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -714,7 +704,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{container=\"ecowitt-exporter\", sensor=\"outdoor\"}",
+          "expr": "ecowitt_temp{sensor=\"outdoor\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -723,7 +713,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -733,7 +723,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -787,7 +777,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{container=\"ecowitt-exporter\", sensor=\"windspeed\"}",
+          "expr": "ecowitt_windspeed{sensor=\"windspeed\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -796,7 +786,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -806,7 +796,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -860,7 +850,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{container=\"ecowitt-exporter\", sensor=\"windgust\"}",
+          "expr": "ecowitt_windspeed{sensor=\"windgust\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -869,7 +859,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -885,7 +875,7 @@
       },
       "id": 58,
       "options": {
-        "alertInstanceLabelFilter": "{container=\"ecowitt-exporter\"}",
+        "alertInstanceLabelFilter": "",
         "alertName": "",
         "dashboardAlerts": false,
         "datasource": "Prometheus",
@@ -924,7 +914,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1015,7 +1005,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -1025,7 +1015,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1107,7 +1097,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_humidity{container=\"ecowitt-exporter\", sensor=\"outdoor\"}",
+          "expr": "ecowitt_humidity{sensor=\"outdoor\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1116,7 +1106,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -1126,7 +1116,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1218,7 +1208,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -1241,7 +1231,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1336,11 +1326,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{container=\"ecowitt-exporter\", sensor!~\"total|yearly\"}",
+          "expr": "ecowitt_rain{sensor!~\"total|yearly\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -1355,7 +1345,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1414,7 +1404,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -1437,7 +1427,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1522,11 +1512,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{container=\"ecowitt-exporter\", sensor!=\"maxdailygust\"}",
+          "expr": "ecowitt_windspeed{sensor!=\"maxdailygust\"}",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -1542,7 +1532,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1697,7 +1687,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed_beaufort{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_windspeed_beaufort",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1706,7 +1696,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -1716,7 +1706,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1872,11 +1862,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_winddir{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_winddir",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1891,7 +1881,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2045,12 +2035,12 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "ecowitt_winddir{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_winddir",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -2078,7 +2068,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -2207,11 +2197,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_uv{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_uv",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2226,7 +2216,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2303,11 +2293,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_solarradiation{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_solarradiation",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{__name__}}",
@@ -2335,7 +2325,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2394,7 +2384,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -2404,7 +2394,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2454,7 +2444,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "min(ecowitt_lightning{container=\"ecowitt-exporter\"})",
+          "expr": "min(ecowitt_lightning)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2463,7 +2453,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -2473,7 +2463,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2534,7 +2524,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -2544,7 +2534,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2595,7 +2585,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_lightning_time{container=\"ecowitt-exporter\"} * 1000",
+          "expr": "ecowitt_lightning_time * 1000",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2604,7 +2594,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -2627,7 +2617,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2725,11 +2715,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_pm25{container=\"ecowitt-exporter\", series=\"realtime\"}",
+          "expr": "ecowitt_pm25{series=\"realtime\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2744,7 +2734,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2842,11 +2832,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_pm25{container=\"ecowitt-exporter\", series=\"avg_24h\"}",
+          "expr": "ecowitt_pm25{series=\"avg_24h\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2861,7 +2851,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2972,7 +2962,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_aqi{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_aqi",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2981,11 +2971,11 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
-      "title": "UK Air Quality Index",
+      "title": "Air Quality Index",
       "type": "gauge"
     },
     {
@@ -3004,7 +2994,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3086,7 +3076,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_soilmoisture{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_soilmoisture",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -3095,7 +3085,7 @@
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           }
         }
       ],
@@ -3118,7 +3108,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3293,11 +3283,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_batterystatus{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_batterystatus",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -3308,11 +3298,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_batterylevel{container=\"ecowitt-exporter\"}",
+          "expr": "ecowitt_batterylevel",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -3325,7 +3315,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -3356,7 +3346,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "${datasource}"
           },
           "fieldConfig": {
             "defaults": {
@@ -3456,7 +3446,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "rate(ecowitt_forward_total[5m])",
@@ -3467,7 +3457,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "${datasource}"
               },
               "editorMode": "code",
               "expr": "rate(ecowitt_forward_errors[5m])",
@@ -3491,7 +3481,26 @@
     "ecowitt"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-24h",
