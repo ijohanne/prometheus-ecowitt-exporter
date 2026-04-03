@@ -214,6 +214,21 @@ in
         };
         gUnit = category: cfg_unit:
           grafanaUnitMap.${category}.${cfg_unit} or "${cfg_unit}";
+        convertIrradiance = value:
+          if cfg.irradianceUnit == "wm2" then value
+          else if cfg.irradianceUnit == "lx" then value / 0.0079
+          else if cfg.irradianceUnit == "klx" then value / 0.0079 / 1000.0
+          else if cfg.irradianceUnit == "fc" then value * 6.345
+          else value;
+        irradianceStatThresholds = builtins.toJSON (map convertIrradiance [
+          200.0
+          400.0
+          600.0
+          800.0
+          1000.0
+        ]);
+        irradianceHeatmapMin = builtins.toJSON (convertIrradiance 0.0);
+        irradianceHeatmapMax = builtins.toJSON (convertIrradiance 1100.0);
 
         dashboardDir = pkgs.runCommand "ecowitt-grafana-dashboard" {
           nativeBuildInputs = [ pkgs.jq ];
@@ -229,6 +244,27 @@ in
                   .panels |= map(
                     if (.id as $id | ids | index($id)) then
                       .fieldConfig.defaults.unit = unit
+                    else . end
+                  )
+                else . end
+              );
+
+            def set_threshold_values(ids; values):
+              .panels |= map(
+                if (.id as $id | ids | index($id)) then
+                  .fieldConfig.defaults.thresholds.steps[1].value = values[0]
+                  | .fieldConfig.defaults.thresholds.steps[2].value = values[1]
+                  | .fieldConfig.defaults.thresholds.steps[3].value = values[2]
+                  | .fieldConfig.defaults.thresholds.steps[4].value = values[3]
+                  | .fieldConfig.defaults.thresholds.steps[5].value = values[4]
+                elif .panels then
+                  .panels |= map(
+                    if (.id as $id | ids | index($id)) then
+                      .fieldConfig.defaults.thresholds.steps[1].value = values[0]
+                      | .fieldConfig.defaults.thresholds.steps[2].value = values[1]
+                      | .fieldConfig.defaults.thresholds.steps[3].value = values[2]
+                      | .fieldConfig.defaults.thresholds.steps[4].value = values[3]
+                      | .fieldConfig.defaults.thresholds.steps[5].value = values[4]
                     else . end
                   )
                 else . end
@@ -251,6 +287,21 @@ in
                 else . end
               );
 
+            def set_heatmap_scale(ids; min; max):
+              .panels |= map(
+                if (.id as $id | ids | index($id)) then
+                  .options.color.min = min
+                  | .options.color.max = max
+                elif .panels then
+                  .panels |= map(
+                    if (.id as $id | ids | index($id)) then
+                      .options.color.min = min
+                      | .options.color.max = max
+                    else . end
+                  )
+                else . end
+              );
+
             set_unit([36, 52, 53, 62]; "${gUnit "temperature" cfg.temperatureUnit}")
             | set_unit([38, 54, 55, 25]; "${gUnit "wind" cfg.windUnit}")
             | set_unit([37, 63]; "${gUnit "pressure" cfg.pressureUnit}")
@@ -259,7 +310,9 @@ in
             | set_unit([39]; "${gUnit "rainRate" cfg.rainUnit}")
             | set_unit([64, 67]; "${gUnit "distance" cfg.distanceUnit}")
             | set_unit([40]; "${gUnit "irradiance" cfg.irradianceUnit}")
+            | set_threshold_values([40]; ${irradianceStatThresholds})
             | set_heatmap_unit([27]; "${gUnit "irradiance" cfg.irradianceUnit}")
+            | set_heatmap_scale([27]; ${irradianceHeatmapMin}; ${irradianceHeatmapMax})
           ' "$src" > $out/EcowittWeatherStation.json
         '';
       in [
