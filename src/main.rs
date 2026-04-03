@@ -44,6 +44,10 @@ fn wm22lux(wm2: f64) -> f64 {
     wm2 / 0.0079
 }
 
+fn wm22klx(wm2: f64) -> f64 {
+    wm2 / 0.0079 / 1000.0
+}
+
 fn wm22fc(wm2: f64) -> f64 {
     wm2 * 6.345
 }
@@ -184,6 +188,7 @@ struct Metrics {
     lightning_time: GaugeVec,
     ws90: GaugeVec,
     soilmoisture: GaugeVec,
+    info: GaugeVec,
     forward_total: IntCounterVec,
     forward_errors: IntCounterVec,
     registry: Registry,
@@ -302,6 +307,23 @@ impl Metrics {
         )
         .expect("metric can be created");
 
+        let info = GaugeVec::new(
+            Opts::new("ecowitt_exporter_info", "Exporter configuration"),
+            &[
+                "temperature_unit",
+                "pressure_unit",
+                "wind_unit",
+                "rain_unit",
+                "distance_unit",
+                "irradiance_unit",
+                "aqi_standard",
+                "soil_moisture",
+                "lightning",
+                "air_quality",
+            ],
+        )
+        .expect("metric can be created");
+
         let forward_total = IntCounterVec::new(
             Opts::new("ecowitt_forward_total", "Total forwarded requests"),
             &["url"],
@@ -340,6 +362,7 @@ impl Metrics {
             lightning_time,
             ws90,
             soilmoisture,
+            info,
             forward_total,
             forward_errors,
         );
@@ -365,6 +388,7 @@ impl Metrics {
             lightning_time,
             ws90,
             soilmoisture,
+            info,
             forward_total,
             forward_errors,
             registry,
@@ -442,6 +466,15 @@ struct Args {
 
     #[clap(long)]
     forward_url: Vec<String>,
+
+    #[clap(long)]
+    enable_soil_moisture: bool,
+
+    #[clap(long)]
+    enable_lightning: bool,
+
+    #[clap(long)]
+    enable_air_quality: bool,
 }
 
 impl Args {
@@ -515,6 +548,7 @@ fn convert_rain(value: f64, unit: &str) -> f64 {
 fn convert_irradiance(value: f64, unit: &str) -> f64 {
     match unit {
         "lx" => wm22lux(value),
+        "klx" => wm22klx(value),
         "fc" => wm22fc(value),
         _ => value,
     }
@@ -609,16 +643,19 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
 
         // PM2.5
         if key.starts_with("pm25") && !key.starts_with("pm25batt") {
-            // Check for invalid readings when battery is low
-            let skip_ch1 = data.get("pm25batt1").is_some_and(|b| b == "1")
-                && data.get("pm25_ch1").is_some_and(|v| v == "1000");
-            let skip_ch2 = data.get("pm25batt2").is_some_and(|b| b == "1")
-                && data.get("pm25_ch2").is_some_and(|v| v == "1000");
-            if skip_ch1 || skip_ch2 {
-                if config.debug {
-                    println!("[{station}] Drop erroneous PM25 reading {key}: {raw_value}");
+            // Check for invalid readings when battery is low — skip only the affected channel
+            if let Some(caps) = ch_re.captures(key) {
+                let ch = caps.get(1).expect("capture group exists").as_str();
+                let batt_key = format!("pm25batt{}", &ch[2..]);
+                let val_key = format!("pm25_{ch}");
+                let skip = data.get(&batt_key).is_some_and(|b| b == "1")
+                    && data.get(&val_key).is_some_and(|v| v == "1000");
+                if skip {
+                    if config.debug {
+                        println!("[{station}] Drop erroneous PM25 reading {key}: {raw_value} (battery low on {ch})");
+                    }
+                    continue;
                 }
-                continue;
             }
 
             if let Ok(v) = raw_value.parse::<f64>() {
@@ -914,7 +951,34 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build()
         .expect("HTTP client can be created");
 
+    println!("  SOIL_MOISTURE:    {}", args.enable_soil_moisture);
+    println!("  LIGHTNING:        {}", args.enable_lightning);
+    println!("  AIR_QUALITY:      {}", args.enable_air_quality);
+
     let metrics = Metrics::new();
+    let feat = |enabled: bool| {
+        if enabled {
+            "enabled"
+        } else {
+            "disabled"
+        }
+    };
+    metrics
+        .info
+        .with_label_values(&[
+            &args.temperature_unit,
+            &args.pressure_unit,
+            &args.wind_unit,
+            &args.rain_unit,
+            &args.distance_unit,
+            &args.irradiance_unit,
+            &args.aqi_standard,
+            feat(args.enable_soil_moisture),
+            feat(args.enable_lightning),
+            feat(args.enable_air_quality),
+        ])
+        .set(1.0);
+
     let state = Arc::new(Mutex::new(AppState {
         metrics,
         config: args.clone(),

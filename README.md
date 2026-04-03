@@ -92,12 +92,15 @@ All configuration is via command-line flags. Metric/SI units are the default.
 | `--wind-unit` | `kmh` | `kmh`, `mph`, `ms`, `knots`, `fps` | Wind speed unit |
 | `--rain-unit` | `mm` | `mm`, `in` | Rainfall unit |
 | `--distance-unit` | `km` | `km`, `mi` | Lightning distance unit |
-| `--irradiance-unit` | `wm2` | `wm2`, `lx`, `fc` | Solar irradiance unit |
+| `--irradiance-unit` | `wm2` | `wm2`, `lx`, `klx`, `fc` | Solar irradiance unit |
 | `--aqi-standard` | `epa` | `uk`, `epa`, `mep`, `nepm` | Air Quality Index standard |
 | `--outdoor-location` | | | Label for outdoor sensor location |
 | `--indoor-location` | | | Label for indoor sensor location |
 | `--temp1-location` .. `--temp8-location` | | | Label for channel 1-8 temperature sensors |
 | `--forward-url` | | | URL to forward received data to (repeatable) |
+| `--enable-soil-moisture` | `false` | | Signal that soil moisture sensors are connected |
+| `--enable-lightning` | `false` | | Signal that a lightning sensor is connected |
+| `--enable-air-quality` | `false` | | Signal that an air quality sensor is connected |
 | `--debug` | `false` | | Enable debug logging |
 
 ## How to configure your weather station
@@ -135,7 +138,10 @@ This project provides a NixOS flake with a module. Add it to your flake inputs a
 
 Optional opt-in features:
 - `enableLocalScraping` - automatically configure local Prometheus to scrape this exporter
-- `enableGrafanaDashboard` - provision the included Grafana dashboard
+- `enableGrafanaDashboard` - provision the included Grafana dashboard (units are automatically matched to your configured units)
+- `enableSoilMoisture` - signal that soil moisture sensors are connected
+- `enableLightning` - signal that a lightning sensor is connected
+- `enableAirQuality` - signal that an air quality sensor is connected
 
 ### Docker
 
@@ -157,8 +163,16 @@ cargo build --release
 An accompanying [Grafana dashboard](grafana/EcowittWeatherStation.json) is included.
 Import it into your Grafana instance and select your Prometheus datasource.
 
-Note: dashboard units are currently hardcoded and must be manually adjusted
-to match your exporter's unit configuration.
+The exporter publishes an `ecowitt_exporter_info` metric with labels for all configured
+units and enabled features. The dashboard reads these as hidden template variables.
+
+**NixOS**: When using `enableGrafanaDashboard`, panel display units are automatically
+matched to your configured units (e.g. `windUnit = "kmh"` sets wind panels to km/h).
+
+**Non-Nix**: The base dashboard uses metric/SI defaults (°C, hPa, km/h, mm, km, W/m²).
+If your exporter uses different units, edit the dashboard JSON panel units to match.
+Optional sensor rows (Soil moisture, Lightning, Air quality) are collapsed by default;
+enable the corresponding `--enable-*` flags so the info metric reflects your setup.
 
 ## Testing
 

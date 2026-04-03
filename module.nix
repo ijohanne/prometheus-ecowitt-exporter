@@ -66,7 +66,7 @@ in
           type = types.str;
           default = "wm2";
           description = ''
-            Irradiance unit (wm2, lx, fc).
+            Irradiance unit (wm2, lx, klx, fc).
           '';
         };
         aqiStandard = mkOption {
@@ -111,6 +111,9 @@ in
             List of URLs to forward received data to (fire-and-forget, no TLS verification).
           '';
         };
+        enableSoilMoisture = mkEnableOption "soil moisture sensors in the dashboard";
+        enableLightning = mkEnableOption "lightning sensors in the dashboard";
+        enableAirQuality = mkEnableOption "air quality sensors in the dashboard";
         debug = mkOption {
           type = types.bool;
           default = false;
@@ -168,7 +171,10 @@ in
             ${optionalString (cfg.indoorLocation != null) ''--indoor-location "${cfg.indoorLocation}"''} \
             ${tempLocationArgs} \
             ${forwardUrlArgs} \
-            ${optionalString cfg.debug "--debug"}
+            ${optionalString cfg.debug "--debug"} \
+            ${optionalString cfg.enableSoilMoisture "--enable-soil-moisture"} \
+            ${optionalString cfg.enableLightning "--enable-lightning"} \
+            ${optionalString cfg.enableAirQuality "--enable-air-quality"}
         '';
       in
       {
@@ -195,10 +201,53 @@ in
       }
     ];
 
-    services.grafana.provision.dashboards.settings.providers = mkIf cfg.enableGrafanaDashboard [
+    services.grafana.provision.dashboards.settings.providers = mkIf cfg.enableGrafanaDashboard
+      let
+        grafanaUnitMap = {
+          temperature = { c = "celsius"; f = "fahrenheit"; k = "kelvin"; };
+          wind = { kmh = "velocitykmh"; mph = "velocitymph"; ms = "velocityms"; knots = "velocityknot"; fps = "velocityfps"; };
+          pressure = { hpa = "pressurehpa"; inhg = "pressureinHg"; mmhg = "pressurembar"; };
+          rain = { mm = "lengthmm"; "in" = "lengthin"; };
+          rainRate = { mm = "mm/h"; "in" = "in/h"; };
+          distance = { km = "lengthkm"; mi = "lengthmi"; };
+          irradiance = { wm2 = "Wm2"; lx = "lux"; klx = "klux"; fc = "fc"; };
+        };
+        gUnit = category: cfg_unit:
+          grafanaUnitMap.${category}.${cfg_unit} or "${cfg_unit}";
+
+        dashboardDir = pkgs.runCommand "ecowitt-grafana-dashboard" {
+          nativeBuildInputs = [ pkgs.jq ];
+          src = "${self}/grafana/EcowittWeatherStation.json";
+        } ''
+          mkdir -p $out
+          jq '
+            def set_unit(ids; unit):
+              .panels |= map(
+                if (.id as $id | ids | index($id)) then
+                  .fieldConfig.defaults.unit = unit
+                elif .panels then
+                  .panels |= map(
+                    if (.id as $id | ids | index($id)) then
+                      .fieldConfig.defaults.unit = unit
+                    else . end
+                  )
+                else . end
+              );
+
+            set_unit([36, 52, 53, 62]; "${gUnit "temperature" cfg.temperatureUnit}")
+            | set_unit([38, 54, 55, 25]; "${gUnit "wind" cfg.windUnit}")
+            | set_unit([37, 63]; "${gUnit "pressure" cfg.pressureUnit}")
+            | set_unit([42]; "${gUnit "rain" cfg.rainUnit}")
+            | set_unit([69]; "${gUnit "rain" cfg.rainUnit}")
+            | set_unit([39]; "${gUnit "rainRate" cfg.rainUnit}")
+            | set_unit([64, 67]; "${gUnit "distance" cfg.distanceUnit}")
+            | set_unit([40]; "${gUnit "irradiance" cfg.irradianceUnit}")
+          ' "$src" > $out/EcowittWeatherStation.json
+        '';
+      in [
       {
         name = "${name}";
-        options.path = "${self}/grafana";
+        options.path = dashboardDir;
         disableDeletion = true;
       }
     ];
