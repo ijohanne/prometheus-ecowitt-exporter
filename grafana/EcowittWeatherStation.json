@@ -3479,7 +3479,7 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "rate(ecowitt_forward_total{station=~\"$station\"}[5m])",
+              "expr": "rate(ecowitt_forward_total[5m])",
               "legendFormat": "{{url}} total/s",
               "range": true,
               "refId": "A"
@@ -3490,7 +3490,7 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "rate(ecowitt_forward_errors{station=~\"$station\"}[5m])",
+              "expr": "rate(ecowitt_forward_errors[5m])",
               "legendFormat": "{{url}} errors/s",
               "range": true,
               "refId": "B"
