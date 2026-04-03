@@ -160,7 +160,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -240,7 +240,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_humidity{sensor=\"outdoor\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_humidity{sensor=\"outdoor\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -312,7 +312,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_barom{sensor=\"relative\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_barom{sensor=\"relative\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -386,7 +386,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{sensor=\"windspeed\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_windspeed{sensor=\"windspeed\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -945,7 +945,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -996,7 +996,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "Outdoor",
@@ -1011,7 +1011,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{sensor=\"indoor\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_temp{sensor=\"indoor\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "Indoor",
@@ -1061,7 +1061,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1112,7 +1112,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_humidity{sensor=\"outdoor\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_humidity{sensor=\"outdoor\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "Outdoor",
@@ -1127,7 +1127,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_humidity{sensor=\"indoor\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_humidity{sensor=\"indoor\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "Indoor",
@@ -1177,7 +1177,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1229,7 +1229,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_barom{sensor=\"relative\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_barom{sensor=\"relative\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -1292,7 +1292,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1488,7 +1488,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1546,7 +1546,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{sensor!=\"maxdailygust\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_windspeed{sensor!=\"maxdailygust\", station=~\"$station\"}[2m])",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -1768,7 +1768,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -2677,7 +2677,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "spanNulls": false,
+                "spanNulls": true,
                 "stacking": {
                   "group": "A",
                   "mode": "none"
@@ -2794,7 +2794,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "spanNulls": false,
+                "spanNulls": true,
                 "stacking": {
                   "group": "A",
                   "mode": "none"
@@ -3055,7 +3055,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "spanNulls": false,
+                "spanNulls": true,
                 "stacking": {
                   "group": "A",
                   "mode": "none"
@@ -3398,7 +3398,7 @@
                   "type": "linear"
                 },
                 "showPoints": "never",
-                "spanNulls": false,
+                "spanNulls": true,
                 "stacking": {
                   "group": "A",
                   "mode": "none"
