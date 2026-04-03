@@ -3139,167 +3139,75 @@
       "type": "row"
     },
     {
+      "id": 48,
+      "title": "Sensor battery: $battery_status_sensor",
+      "type": "gauge",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 85
+      },
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "repeat": "battery_status_sensor",
+      "repeatDirection": "h",
+      "maxPerRow": 6,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "ecowitt_batterystatus{station=~\"$station\", sensor=~\"$battery_status_sensor\"}",
+          "legendFormat": "{{sensor}}",
+          "refId": "A",
+          "range": true
+        }
+      ],
       "fieldConfig": {
         "defaults": {
+          "min": 0,
+          "max": 1,
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "🔋"
-                },
-                "1": {
-                  "color": "yellow",
-                  "index": 1,
-                  "text": "🪫"
-                }
-              },
-              "type": "value"
-            }
-          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 1
               }
             ]
           },
-          "unit": "none"
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "OK"
+                },
+                "1": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "Low"
+                }
+              }
+            }
+          ]
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "A"
-            },
-            "properties": [
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "options": {
-                      "0": {
-                        "color": "green",
-                        "index": 0,
-                        "text": "🔋"
-                      },
-                      "1": {
-                        "color": "red",
-                        "index": 1,
-                        "text": "🪫"
-                      }
-                    },
-                    "type": "value"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "B"
-            },
-            "properties": [
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "options": {
-                      "from": 3,
-                      "result": {
-                        "color": "green",
-                        "index": 0,
-                        "text": "🔋"
-                      },
-                      "to": 5
-                    },
-                    "type": "range"
-                  },
-                  {
-                    "options": {
-                      "from": 0,
-                      "result": {
-                        "color": "red",
-                        "index": 1,
-                        "text": "🪫"
-                      },
-                      "to": 2
-                    },
-                    "type": "range"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byFrameRefID",
-              "options": "C"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "volt"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "options": {
-                      "from": 0,
-                      "result": {
-                        "color": "red",
-                        "index": 0,
-                        "text": "🪫"
-                      },
-                      "to": 1.5
-                    },
-                    "type": "range"
-                  },
-                  {
-                    "options": {
-                      "from": 1.5,
-                      "result": {
-                        "color": "green",
-                        "index": 1,
-                        "text": "🔋"
-                      }
-                    },
-                    "type": "range"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
-      "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 85
-      },
-      "id": 48,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -3307,64 +3215,152 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false,
+        "orientation": "auto",
+        "sizing": "auto"
+      }
+    },
+    {
+      "id": 70,
+      "title": "Battery level: $battery_level_sensor",
+      "type": "gauge",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 90
       },
-      "pluginVersion": "12.0.0+security-01",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "repeat": "battery_level_sensor",
+      "repeatDirection": "h",
+      "maxPerRow": 6,
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "ecowitt_batterystatus{station=~\"$station\"}",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
+          "expr": "ecowitt_batterylevel{station=~\"$station\", sensor=~\"$battery_level_sensor\"}",
           "legendFormat": "{{sensor}}",
-          "range": true,
           "refId": "A",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "ecowitt_batterylevel{station=~\"$station\"}",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{sensor}}",
-          "range": true,
-          "refId": "B",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "ecowitt_batteryvoltage{station=~\"$station\"}",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{sensor}}",
-          "range": true,
-          "refId": "C",
-          "useBackend": false
+          "range": true
         }
       ],
-      "title": "Battery status",
-      "type": "stat"
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 5,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "green",
+                "value": 4
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "orientation": "auto",
+        "sizing": "auto"
+      }
+    },
+    {
+      "id": 71,
+      "title": "Battery voltage: $battery_voltage_sensor",
+      "type": "gauge",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 95
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "repeat": "battery_voltage_sensor",
+      "repeatDirection": "h",
+      "maxPerRow": 6,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "ecowitt_batteryvoltage{station=~\"$station\", sensor=~\"$battery_voltage_sensor\"}",
+          "legendFormat": "{{sensor}}",
+          "refId": "A",
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 6,
+          "unit": "volt",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1.2
+              },
+              {
+                "color": "green",
+                "value": 2.0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "orientation": "auto",
+        "sizing": "auto"
+      }
     },
     {
       "collapsed": true,
@@ -3766,6 +3762,87 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0
+      },
+      {
+        "name": "battery_status_sensor",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(ecowitt_batterystatus{station=~\"$station\"}, sensor)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ecowitt_batterystatus{station=~\"$station\"}, sensor)",
+          "refId": "var-battery_status_sensor"
+        },
+        "refresh": 2,
+        "hide": 2,
+        "multi": true,
+        "includeAll": true,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1
+      },
+      {
+        "name": "battery_level_sensor",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(ecowitt_batterylevel{station=~\"$station\"}, sensor)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ecowitt_batterylevel{station=~\"$station\"}, sensor)",
+          "refId": "var-battery_level_sensor"
+        },
+        "refresh": 2,
+        "hide": 2,
+        "multi": true,
+        "includeAll": true,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1
+      },
+      {
+        "name": "battery_voltage_sensor",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(ecowitt_batteryvoltage{station=~\"$station\"}, sensor)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ecowitt_batteryvoltage{station=~\"$station\"}, sensor)",
+          "refId": "var-battery_voltage_sensor"
+        },
+        "refresh": 2,
+        "hide": 2,
+        "multi": true,
+        "includeAll": true,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1
       }
     ]
   },

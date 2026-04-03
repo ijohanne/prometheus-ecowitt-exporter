@@ -606,10 +606,10 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
             continue;
         }
 
-        // WS90 capacitor voltage
+        // WS90 capacitor voltage (solar-charged supercapacitor)
         if key == "ws90cap_volt" {
             if let Ok(v) = raw_value.parse::<f64>() {
-                metrics.ws90.with_label_values(&[station, key, "volt"]).set(v);
+                metrics.batteryvoltage.with_label_values(&[station, key, "volt"]).set(v);
             }
             continue;
         }
