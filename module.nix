@@ -237,12 +237,14 @@ in
             def set_heatmap_unit(ids; unit):
               .panels |= map(
                 if (.id as $id | ids | index($id)) then
-                  .options.cellValues.unit = unit
+                  .fieldConfig.defaults.unit = unit
+                  | .options.cellValues.unit = unit
                   | .options.yAxis.unit = unit
                 elif .panels then
                   .panels |= map(
                     if (.id as $id | ids | index($id)) then
-                      .options.cellValues.unit = unit
+                      .fieldConfig.defaults.unit = unit
+                      | .options.cellValues.unit = unit
                       | .options.yAxis.unit = unit
                     else . end
                   )

@@ -2259,7 +2259,8 @@
             "scaleDistribution": {
               "type": "linear"
             }
-          }
+          },
+          "unit": "Wm2"
         },
         "overrides": []
       },
