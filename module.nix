@@ -201,7 +201,7 @@ in
       }
     ];
 
-    services.grafana.provision.dashboards.settings.providers = mkIf cfg.enableGrafanaDashboard
+    services.grafana.provision.dashboards.settings.providers = mkIf cfg.enableGrafanaDashboard (
       let
         grafanaUnitMap = {
           temperature = { c = "celsius"; f = "fahrenheit"; k = "kelvin"; };
@@ -250,6 +250,6 @@ in
         options.path = dashboardDir;
         disableDeletion = true;
       }
-    ];
+    ]);
   };
 }
