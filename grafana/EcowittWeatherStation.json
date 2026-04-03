@@ -3135,16 +3135,16 @@
       },
       "id": 47,
       "panels": [],
-      "title": "Battery status",
+      "title": "Battery",
       "type": "row"
     },
     {
       "id": 48,
-      "title": "Sensor battery: $battery_status_sensor",
+      "title": "Battery status",
       "type": "gauge",
       "gridPos": {
         "h": 5,
-        "w": 4,
+        "w": 8,
         "x": 0,
         "y": 85
       },
@@ -3152,16 +3152,13 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "repeat": "battery_status_sensor",
-      "repeatDirection": "h",
-      "maxPerRow": 6,
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "ecowitt_batterystatus{station=~\"$station\", sensor=~\"$battery_status_sensor\"}",
+          "expr": "ecowitt_batterystatus{station=~\"$station\"}",
           "legendFormat": "{{sensor}}",
           "refId": "A",
           "range": true
@@ -3223,28 +3220,25 @@
     },
     {
       "id": 70,
-      "title": "Battery level: $battery_level_sensor",
+      "title": "Battery level",
       "type": "gauge",
       "gridPos": {
         "h": 5,
-        "w": 4,
-        "x": 0,
-        "y": 90
+        "w": 8,
+        "x": 8,
+        "y": 85
       },
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "repeat": "battery_level_sensor",
-      "repeatDirection": "h",
-      "maxPerRow": 6,
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "ecowitt_batterylevel{station=~\"$station\", sensor=~\"$battery_level_sensor\"}",
+          "expr": "ecowitt_batterylevel{station=~\"$station\"}",
           "legendFormat": "{{sensor}}",
           "refId": "A",
           "range": true
@@ -3293,28 +3287,25 @@
     },
     {
       "id": 71,
-      "title": "Battery voltage: $battery_voltage_sensor",
+      "title": "Battery voltage",
       "type": "gauge",
       "gridPos": {
         "h": 5,
-        "w": 4,
-        "x": 0,
-        "y": 95
+        "w": 8,
+        "x": 16,
+        "y": 85
       },
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "repeat": "battery_voltage_sensor",
-      "repeatDirection": "h",
-      "maxPerRow": 6,
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "ecowitt_batteryvoltage{station=~\"$station\", sensor=~\"$battery_voltage_sensor\"}",
+          "expr": "ecowitt_batteryvoltage{station=~\"$station\"}",
           "legendFormat": "{{sensor}}",
           "refId": "A",
           "range": true
@@ -3762,87 +3753,6 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0
-      },
-      {
-        "name": "battery_status_sensor",
-        "type": "query",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(ecowitt_batterystatus{station=~\"$station\"}, sensor)",
-        "query": {
-          "qryType": 1,
-          "query": "label_values(ecowitt_batterystatus{station=~\"$station\"}, sensor)",
-          "refId": "var-battery_status_sensor"
-        },
-        "refresh": 2,
-        "hide": 2,
-        "multi": true,
-        "includeAll": true,
-        "current": {
-          "selected": true,
-          "text": "All",
-          "value": "$__all"
-        },
-        "options": [],
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1
-      },
-      {
-        "name": "battery_level_sensor",
-        "type": "query",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(ecowitt_batterylevel{station=~\"$station\"}, sensor)",
-        "query": {
-          "qryType": 1,
-          "query": "label_values(ecowitt_batterylevel{station=~\"$station\"}, sensor)",
-          "refId": "var-battery_level_sensor"
-        },
-        "refresh": 2,
-        "hide": 2,
-        "multi": true,
-        "includeAll": true,
-        "current": {
-          "selected": true,
-          "text": "All",
-          "value": "$__all"
-        },
-        "options": [],
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1
-      },
-      {
-        "name": "battery_voltage_sensor",
-        "type": "query",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(ecowitt_batteryvoltage{station=~\"$station\"}, sensor)",
-        "query": {
-          "qryType": 1,
-          "query": "label_values(ecowitt_batteryvoltage{station=~\"$station\"}, sensor)",
-          "refId": "var-battery_voltage_sensor"
-        },
-        "refresh": 2,
-        "hide": 2,
-        "multi": true,
-        "includeAll": true,
-        "current": {
-          "selected": true,
-          "text": "All",
-          "value": "$__all"
-        },
-        "options": [],
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1
       }
     ]
   },

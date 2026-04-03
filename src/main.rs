@@ -186,7 +186,6 @@ struct Metrics {
     lightning: GaugeVec,
     lightning_num: GaugeVec,
     lightning_time: GaugeVec,
-    ws90: GaugeVec,
     soilmoisture: GaugeVec,
     info: GaugeVec,
     forward_total: IntCounterVec,
@@ -295,12 +294,6 @@ impl Metrics {
         )
         .expect("metric can be created");
 
-        let ws90 = GaugeVec::new(
-            Opts::new("ecowitt_wh90", "WS90 electrical energy stored"),
-            &["station", "sensor", "unit"],
-        )
-        .expect("metric can be created");
-
         let soilmoisture = GaugeVec::new(
             Opts::new("ecowitt_soilmoisture", "Soil moisture"),
             &["station", "sensor", "unit"],
@@ -360,7 +353,6 @@ impl Metrics {
             lightning,
             lightning_num,
             lightning_time,
-            ws90,
             soilmoisture,
             info,
             forward_total,
@@ -386,7 +378,6 @@ impl Metrics {
             lightning,
             lightning_num,
             lightning_time,
-            ws90,
             soilmoisture,
             info,
             forward_total,
@@ -397,6 +388,18 @@ impl Metrics {
 }
 
 // Configuration from environment / CLI
+
+#[derive(clap::Args, Debug, Clone)]
+struct Features {
+    #[clap(long)]
+    enable_soil_moisture: bool,
+
+    #[clap(long)]
+    enable_lightning: bool,
+
+    #[clap(long)]
+    enable_air_quality: bool,
+}
 
 #[derive(Parser, Debug, Clone)]
 #[clap(author, version, about = "Prometheus exporter for Ecowitt weather stations")]
@@ -467,14 +470,8 @@ struct Args {
     #[clap(long)]
     forward_url: Vec<String>,
 
-    #[clap(long)]
-    enable_soil_moisture: bool,
-
-    #[clap(long)]
-    enable_lightning: bool,
-
-    #[clap(long)]
-    enable_air_quality: bool,
+    #[clap(flatten)]
+    features: Features,
 }
 
 impl Args {
@@ -510,6 +507,26 @@ fn rain_piezo_maps() -> HashMap<&'static str, &'static str> {
     m.insert("mrain_piezo", "monthlyrain");
     m.insert("yrain_piezo", "yearlyrain");
     m
+}
+
+fn battery_sensor_name(key: &str) -> String {
+    match key {
+        "wh25batt" => "WH25".to_string(),
+        "wh26batt" => "WH26".to_string(),
+        "wh40batt" => "WH40".to_string(),
+        "wh65batt" => "WH65".to_string(),
+        "wh68batt" => "WH68".to_string(),
+        "wh80batt" => "WH80".to_string(),
+        "wh90batt" => "WH90".to_string(),
+        "wh57batt" => "WH57 Lightning".to_string(),
+        "co2_batt" => "WH45 CO2".to_string(),
+        "ws90cap_volt" => "WS90 Supercap".to_string(),
+        k if k.starts_with("batt") => format!("CH{}", &k[4..]),
+        k if k.starts_with("pm25batt") => format!("PM2.5 CH{}", &k[8..]),
+        k if k.starts_with("leakbatt") => format!("Leak CH{}", &k[8..]),
+        k if k.starts_with("soilbatt") => format!("Soil CH{}", &k[8..]),
+        _ => key.to_string(),
+    }
 }
 
 fn convert_temperature(value: f64, unit: &str) -> f64 {
@@ -560,7 +577,9 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
     let metrics = &state.metrics;
     let ch_re = Regex::new(r"(ch\d)$").expect("valid regex");
     let rainmaps = rain_piezo_maps();
-    let battery_level_keys = ["wh57batt", "pm25batt1", "pm25batt2"];
+    let is_battery_level = |k: &str| -> bool {
+        k == "wh57batt" || k == "co2_batt" || k.starts_with("pm25batt") || k.starts_with("leakbatt")
+    };
 
     for (key, raw_value) in data {
         let key = key.as_str();
@@ -609,7 +628,8 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
         // WS90 capacitor voltage (solar-charged supercapacitor)
         if key == "ws90cap_volt" {
             if let Ok(v) = raw_value.parse::<f64>() {
-                metrics.batteryvoltage.with_label_values(&[station, key, "volt"]).set(v);
+                let name = battery_sensor_name(key);
+                metrics.batteryvoltage.with_label_values(&[station, &name, "volt"]).set(v);
             }
             continue;
         }
@@ -617,12 +637,16 @@ fn process_report(state: &AppState, station: &str, data: &HashMap<String, String
         // Battery status & levels
         if key.contains("batt") {
             if let Ok(v) = raw_value.parse::<f64>() {
-                if battery_level_keys.contains(&key) {
-                    metrics.batterylevel.with_label_values(&[station, key]).set(v);
-                } else if key.starts_with("soil") || key.starts_with("ws90") {
-                    metrics.batteryvoltage.with_label_values(&[station, key, "volt"]).set(v);
+                let name = battery_sensor_name(key);
+                if is_battery_level(key) {
+                    metrics.batterylevel.with_label_values(&[station, &name]).set(v);
+                } else if key.starts_with("soil")
+                    || key.starts_with("ws90")
+                    || matches!(key, "wh90batt" | "wh80batt" | "wh68batt")
+                {
+                    metrics.batteryvoltage.with_label_values(&[station, &name, "volt"]).set(v);
                 } else {
-                    metrics.batterystatus.with_label_values(&[station, key]).set(v);
+                    metrics.batterystatus.with_label_values(&[station, &name]).set(v);
                 }
             }
             continue;
@@ -951,9 +975,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build()
         .expect("HTTP client can be created");
 
-    println!("  SOIL_MOISTURE:    {}", args.enable_soil_moisture);
-    println!("  LIGHTNING:        {}", args.enable_lightning);
-    println!("  AIR_QUALITY:      {}", args.enable_air_quality);
+    println!("  SOIL_MOISTURE:    {}", args.features.enable_soil_moisture);
+    println!("  LIGHTNING:        {}", args.features.enable_lightning);
+    println!("  AIR_QUALITY:      {}", args.features.enable_air_quality);
 
     let metrics = Metrics::new();
     let feat = |enabled: bool| {
@@ -973,9 +997,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             &args.distance_unit,
             &args.irradiance_unit,
             &args.aqi_standard,
-            feat(args.enable_soil_moisture),
-            feat(args.enable_lightning),
-            feat(args.enable_air_quality),
+            feat(args.features.enable_soil_moisture),
+            feat(args.features.enable_lightning),
+            feat(args.features.enable_air_quality),
         ])
         .set(1.0);
 
