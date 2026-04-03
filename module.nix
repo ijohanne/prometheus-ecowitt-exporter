@@ -234,6 +234,21 @@ in
                 else . end
               );
 
+            def set_heatmap_unit(ids; unit):
+              .panels |= map(
+                if (.id as $id | ids | index($id)) then
+                  .options.cellValues.unit = unit
+                  | .options.yAxis.unit = unit
+                elif .panels then
+                  .panels |= map(
+                    if (.id as $id | ids | index($id)) then
+                      .options.cellValues.unit = unit
+                      | .options.yAxis.unit = unit
+                    else . end
+                  )
+                else . end
+              );
+
             set_unit([36, 52, 53, 62]; "${gUnit "temperature" cfg.temperatureUnit}")
             | set_unit([38, 54, 55, 25]; "${gUnit "wind" cfg.windUnit}")
             | set_unit([37, 63]; "${gUnit "pressure" cfg.pressureUnit}")
@@ -242,6 +257,7 @@ in
             | set_unit([39]; "${gUnit "rainRate" cfg.rainUnit}")
             | set_unit([64, 67]; "${gUnit "distance" cfg.distanceUnit}")
             | set_unit([40]; "${gUnit "irradiance" cfg.irradianceUnit}")
+            | set_heatmap_unit([27]; "${gUnit "irradiance" cfg.irradianceUnit}")
           ' "$src" > $out/EcowittWeatherStation.json
         '';
       in [
