@@ -160,10 +160,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{sensor=\"outdoor\"}",
+          "expr": "ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -240,10 +240,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_humidity{sensor=\"outdoor\"}",
+          "expr": "ecowitt_humidity{sensor=\"outdoor\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -312,10 +312,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_barom{sensor=\"relative\"}",
+          "expr": "ecowitt_barom{sensor=\"relative\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -386,10 +386,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{sensor=\"windspeed\"}",
+          "expr": "ecowitt_windspeed{sensor=\"windspeed\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -460,10 +460,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{sensor=\"rate\"}",
+          "expr": "ecowitt_rain{sensor=\"rate\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -549,10 +549,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_solarradiation",
+          "expr": "ecowitt_solarradiation{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "Solar radiation",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -631,10 +631,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{sensor=\"outdoor\"}",
+          "expr": "ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -704,10 +704,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{sensor=\"outdoor\"}",
+          "expr": "ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -777,10 +777,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{sensor=\"windspeed\"}",
+          "expr": "ecowitt_windspeed{sensor=\"windspeed\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -850,10 +850,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{sensor=\"windgust\"}",
+          "expr": "ecowitt_windspeed{sensor=\"windgust\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -983,7 +983,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -996,12 +996,27 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_temp{sensor=\"outdoor\"}",
+          "expr": "ecowitt_temp{sensor=\"outdoor\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "Outdoor",
           "range": true,
           "refId": "A",
+          "useBackend": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          }
+        },
+        {
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "ecowitt_temp{sensor=\"indoor\", station=~\"$station\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "Indoor",
+          "range": true,
+          "refId": "B",
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
@@ -1084,7 +1099,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -1097,12 +1112,27 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_humidity{sensor=\"outdoor\"}",
+          "expr": "ecowitt_humidity{sensor=\"outdoor\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "Outdoor",
           "range": true,
           "refId": "A",
+          "useBackend": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          }
+        },
+        {
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "ecowitt_humidity{sensor=\"indoor\", station=~\"$station\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "Indoor",
+          "range": true,
+          "refId": "B",
           "useBackend": false,
           "datasource": {
             "type": "prometheus",
@@ -1199,10 +1229,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_barom{sensor=\"relative\"}",
+          "expr": "ecowitt_barom{sensor=\"relative\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -1330,7 +1360,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{sensor!~\"total|yearly\"}",
+          "expr": "ecowitt_rain{sensor!~\"total|yearly\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -1395,7 +1425,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{sensor=~\"daily|event|monthly|weekly|yearly|total\"}",
+          "expr": "ecowitt_rain{sensor=~\"daily|event|monthly|weekly|yearly|total\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -1516,7 +1546,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed{sensor!=\"maxdailygust\"}",
+          "expr": "ecowitt_windspeed{sensor!=\"maxdailygust\", station=~\"$station\"}",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -1687,10 +1717,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_windspeed_beaufort",
+          "expr": "ecowitt_windspeed_beaufort{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -1866,10 +1896,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_winddir",
+          "expr": "ecowitt_winddir{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1895,7 +1925,7 @@
                 "from": 337.5,
                 "result": {
                   "index": 0,
-                  "text": "↓"
+                  "text": "\u2193"
                 },
                 "to": 360
               },
@@ -1906,7 +1936,7 @@
                 "from": 292.5,
                 "result": {
                   "index": 1,
-                  "text": "↘"
+                  "text": "\u2198"
                 },
                 "to": 337.5
               },
@@ -1917,7 +1947,7 @@
                 "from": 247.5,
                 "result": {
                   "index": 2,
-                  "text": "→"
+                  "text": "\u2192"
                 },
                 "to": 292.5
               },
@@ -1928,7 +1958,7 @@
                 "from": 202.5,
                 "result": {
                   "index": 3,
-                  "text": "↗"
+                  "text": "\u2197"
                 },
                 "to": 247.5
               },
@@ -1939,7 +1969,7 @@
                 "from": 157.5,
                 "result": {
                   "index": 4,
-                  "text": "↑"
+                  "text": "\u2191"
                 },
                 "to": 202.5
               },
@@ -1950,7 +1980,7 @@
                 "from": 112.5,
                 "result": {
                   "index": 5,
-                  "text": "↖"
+                  "text": "\u2196"
                 },
                 "to": 157.5
               },
@@ -1961,7 +1991,7 @@
                 "from": 77.5,
                 "result": {
                   "index": 6,
-                  "text": "←"
+                  "text": "\u2190"
                 },
                 "to": 112.5
               },
@@ -1972,7 +2002,7 @@
                 "from": 22.5,
                 "result": {
                   "index": 7,
-                  "text": "↙"
+                  "text": "\u2199"
                 },
                 "to": 77.5
               },
@@ -1983,7 +2013,7 @@
                 "from": 0,
                 "result": {
                   "index": 8,
-                  "text": "↓"
+                  "text": "\u2193"
                 },
                 "to": 22.5
               },
@@ -2040,7 +2070,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "ecowitt_winddir",
+          "expr": "ecowitt_winddir{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -2201,10 +2231,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_uv",
+          "expr": "ecowitt_uv{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "UV index",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -2269,7 +2299,7 @@
           "color": "rgba(255,0,255,0.7)"
         },
         "filterValues": {
-          "le": 1e-9
+          "le": 1e-09
         },
         "legend": {
           "show": true
@@ -2297,7 +2327,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_solarradiation",
+          "expr": "ecowitt_solarradiation{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{__name__}}",
@@ -2375,10 +2405,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_lightning",
+          "expr": "ecowitt_lightning{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -2444,10 +2474,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "min(ecowitt_lightning)",
+          "expr": "min(ecowitt_lightning){station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -2515,10 +2545,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_lightning_num",
+          "expr": "ecowitt_lightning_num{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -2585,10 +2615,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_lightning_time * 1000",
+          "expr": "ecowitt_lightning_time * 1000{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -2686,7 +2716,7 @@
               }
             ]
           },
-          "unit": "conμgm3"
+          "unit": "con\u03bcgm3"
         },
         "overrides": []
       },
@@ -2719,10 +2749,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_pm25{series=\"realtime\"}",
+          "expr": "ecowitt_pm25{series=\"realtime\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -2803,7 +2833,7 @@
               }
             ]
           },
-          "unit": "conμgm3"
+          "unit": "con\u03bcgm3"
         },
         "overrides": []
       },
@@ -2836,10 +2866,10 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_pm25{series=\"avg_24h\"}",
+          "expr": "ecowitt_pm25{series=\"avg_24h\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -2962,10 +2992,10 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_aqi",
+          "expr": "ecowitt_aqi{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{sensor}}",
           "range": true,
           "refId": "A",
           "useBackend": false,
@@ -3076,7 +3106,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_soilmoisture",
+          "expr": "ecowitt_soilmoisture{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -3121,12 +3151,12 @@
                 "0": {
                   "color": "green",
                   "index": 0,
-                  "text": "🔋"
+                  "text": "\ud83d\udd0b"
                 },
                 "1": {
                   "color": "yellow",
                   "index": 1,
-                  "text": "🪫"
+                  "text": "\ud83e\udeab"
                 }
               },
               "type": "value"
@@ -3161,12 +3191,12 @@
                       "0": {
                         "color": "green",
                         "index": 0,
-                        "text": "🔋"
+                        "text": "\ud83d\udd0b"
                       },
                       "1": {
                         "color": "red",
                         "index": 1,
-                        "text": "🪫"
+                        "text": "\ud83e\udeab"
                       }
                     },
                     "type": "value"
@@ -3190,7 +3220,7 @@
                       "result": {
                         "color": "green",
                         "index": 0,
-                        "text": "🔋"
+                        "text": "\ud83d\udd0b"
                       },
                       "to": 5
                     },
@@ -3202,7 +3232,7 @@
                       "result": {
                         "color": "red",
                         "index": 1,
-                        "text": "🪫"
+                        "text": "\ud83e\udeab"
                       },
                       "to": 2
                     },
@@ -3231,7 +3261,7 @@
                       "result": {
                         "color": "red",
                         "index": 0,
-                        "text": "🪫"
+                        "text": "\ud83e\udeab"
                       },
                       "to": 1.5
                     },
@@ -3243,7 +3273,7 @@
                       "result": {
                         "color": "green",
                         "index": 1,
-                        "text": "🔋"
+                        "text": "\ud83d\udd0b"
                       }
                     },
                     "type": "range"
@@ -3287,7 +3317,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_batterystatus",
+          "expr": "ecowitt_batterystatus{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -3302,7 +3332,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_batterylevel",
+          "expr": "ecowitt_batterylevel{station=~\"$station\"}",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -3319,7 +3349,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_batteryvoltage",
+          "expr": "ecowitt_batteryvoltage{station=~\"$station\"}",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -3449,7 +3479,7 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "rate(ecowitt_forward_total[5m])",
+              "expr": "rate(ecowitt_forward_total{station=~\"$station\"}[5m])",
               "legendFormat": "{{url}} total/s",
               "range": true,
               "refId": "A"
@@ -3460,7 +3490,7 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "rate(ecowitt_forward_errors[5m])",
+              "expr": "rate(ecowitt_forward_errors{station=~\"$station\"}[5m])",
               "legendFormat": "{{url}} errors/s",
               "range": true,
               "refId": "B"
@@ -3499,6 +3529,33 @@
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(ecowitt_temp, station)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "station",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ecowitt_temp, station)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
       }
     ]
   },
