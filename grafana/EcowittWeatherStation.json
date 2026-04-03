@@ -3140,7 +3140,7 @@
     },
     {
       "id": 48,
-      "title": "Battery status",
+      "title": "Battery status (WH25, WH26, WH40, WH65)",
       "type": "gauge",
       "gridPos": {
         "h": 5,
@@ -3220,7 +3220,7 @@
     },
     {
       "id": 70,
-      "title": "Battery level",
+      "title": "Battery level (WH57, WH45, PM2.5, Leak)",
       "type": "gauge",
       "gridPos": {
         "h": 5,
@@ -3287,7 +3287,7 @@
     },
     {
       "id": 71,
-      "title": "Battery voltage",
+      "title": "Battery voltage (WH90, WH80, WH68, Soil)",
       "type": "gauge",
       "gridPos": {
         "h": 5,
