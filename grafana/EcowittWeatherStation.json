@@ -2539,7 +2539,7 @@
                   }
                 ]
               },
-              "unit": "lengthmi"
+              "unit": "lengthkm"
             },
             "overrides": []
           },
@@ -2572,7 +2572,7 @@
             {
               "disableTextWrap": false,
               "editorMode": "builder",
-              "expr": "ecowitt_lightning{station=~\"$station\"}",
+              "expr": "last_over_time(ecowitt_lightning{station=~\"$station\"}[24h])",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
@@ -2608,7 +2608,7 @@
                   }
                 ]
               },
-              "unit": "lengthmi"
+              "unit": "lengthkm"
             },
             "overrides": []
           },
@@ -2641,7 +2641,7 @@
             {
               "disableTextWrap": false,
               "editorMode": "builder",
-              "expr": "min(ecowitt_lightning){station=~\"$station\"}",
+              "expr": "min_over_time(ecowitt_lightning{station=~\"$station\"}[24h])",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
@@ -2654,7 +2654,7 @@
               }
             }
           ],
-          "title": "Closest strike distance",
+          "title": "Closest strike distance (24h)",
           "type": "stat"
         },
         {
@@ -2712,7 +2712,7 @@
             {
               "disableTextWrap": false,
               "editorMode": "builder",
-              "expr": "ecowitt_lightning_num{station=~\"$station\"}",
+              "expr": "max_over_time(ecowitt_lightning_num{station=~\"$station\"}[24h])",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
@@ -2725,7 +2725,7 @@
               }
             }
           ],
-          "title": "Daily count",
+          "title": "24h strike count",
           "type": "stat"
         },
         {
@@ -2782,7 +2782,7 @@
             {
               "disableTextWrap": false,
               "editorMode": "builder",
-              "expr": "ecowitt_lightning_time * 1000{station=~\"$station\"}",
+              "expr": "last_over_time(ecowitt_lightning_time{station=~\"$station\"}[24h]) * 1000",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
