@@ -460,16 +460,16 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{sensor=\"rate\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_rain{sensor=~\"rate|rrain_piezo\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{sensor}}",
+          "legendFormat": "Rain rate",
           "range": true,
           "refId": "A",
           "useBackend": false
         }
       ],
-      "title": "Rainfall",
+      "title": "Rain rate",
       "type": "stat"
     },
     {
@@ -1319,13 +1319,97 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "rate"
+              "id": "byRegexp",
+              "options": "^(rate|rrain_piezo)$"
             },
             "properties": [
               {
+                "id": "displayName",
+                "value": "Rain rate"
+              },
+              {
+                "id": "unit",
+                "value": "mm/h"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
                 "id": "custom.drawStyle",
                 "value": "bars"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(event|erain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Event rain"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(hourly|hrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Last hour"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(daily|drain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Today"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(weekly|wrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "This week"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(monthly|mrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "This month"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(yearly|yrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "This year"
               }
             ]
           }
@@ -1360,7 +1444,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{sensor!~\"total|yearly\", station=~\"$station\"}",
+          "expr": "ecowitt_rain{sensor=~\"rate|event|hourly|daily|weekly|monthly|yearly|rrain_piezo|erain_piezo|hrain_piezo|drain_piezo|wrain_piezo|mrain_piezo|yrain_piezo\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -1394,7 +1478,92 @@
           },
           "unit": "lengthmm"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(event|erain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Event rain"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(hourly|hrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Last hour"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(daily|drain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Today"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(weekly|wrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "This week"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(monthly|mrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "This month"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(yearly|yrain_piezo)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "This year"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "All-time"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -1417,7 +1586,7 @@
           "values": false
         },
         "showPercentChange": false,
-        "textMode": "auto",
+        "textMode": "value_and_name",
         "wideLayout": true
       },
       "pluginVersion": "12.0.0+security-01",
@@ -1425,7 +1594,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{sensor=~\"daily|event|monthly|weekly|yearly|total\", station=~\"$station\"}",
+          "expr": "last_over_time(ecowitt_rain{sensor=~\"event|hourly|daily|weekly|monthly|yearly|total|erain_piezo|hrain_piezo|drain_piezo|wrain_piezo|mrain_piezo|yrain_piezo\", station=~\"$station\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{sensor}}",
@@ -1438,7 +1607,7 @@
           }
         }
       ],
-      "title": "Totals",
+      "title": "Rain totals",
       "type": "stat"
     },
     {
