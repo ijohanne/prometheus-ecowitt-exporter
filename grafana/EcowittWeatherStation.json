@@ -2342,7 +2342,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_uv{station=~\"$station\"}",
+          "expr": "max(last_over_time(ecowitt_uv{station=~\"$station\"}[15m])) or vector(0)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "UV index",
