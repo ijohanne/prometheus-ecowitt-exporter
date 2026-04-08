@@ -302,11 +302,19 @@ in
                 else . end
               );
 
-            def set_row_collapsed(id; collapsed):
-              .panels |= map(
-                if .id == id then
-                  .collapsed = collapsed
-                else . end
+            def expand_row(id):
+              .panels |= reduce .[] as $panel (
+                [];
+                if $panel.id == id then
+                  . + [
+                    ($panel
+                      | .collapsed = false
+                      | .panels = []
+                    )
+                  ] + ($panel.panels // [])
+                else
+                  . + [$panel]
+                end
               );
 
             set_unit([36, 52, 53, 62]; "${gUnit "temperature" cfg.temperatureUnit}")
@@ -320,9 +328,9 @@ in
             | set_threshold_values([40]; ${irradianceStatThresholds})
             | set_heatmap_unit([27]; "${gUnit "irradiance" cfg.irradianceUnit}")
             | set_heatmap_scale([27]; ${irradianceHeatmapMin}; ${irradianceHeatmapMax})
-            | set_row_collapsed(61; ${if cfg.enableSoilMoisture then "false" else "true"})
-            | set_row_collapsed(68; ${if cfg.enableLightning then "false" else "true"})
-            | set_row_collapsed(44; ${if cfg.enableAirQuality then "false" else "true"})
+            ${optionalString cfg.enableSoilMoisture "| expand_row(61)"}
+            ${optionalString cfg.enableLightning "| expand_row(68)"}
+            ${optionalString cfg.enableAirQuality "| expand_row(44)"}
           ' "$src" > $out/EcowittWeatherStation.json
         '';
       in [
