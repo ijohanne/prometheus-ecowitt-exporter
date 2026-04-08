@@ -2284,7 +2284,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "dark-green"
               },
               {
                 "color": "dark-green",
