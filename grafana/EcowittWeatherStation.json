@@ -1422,16 +1422,16 @@
         "y": 25
       },
       "id": 42,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
           "sort": "none"
         }
       },
@@ -1444,16 +1444,16 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "ecowitt_rain{sensor=~\"rate|event|hourly|daily|weekly|monthly|yearly|rrain_piezo|erain_piezo|hrain_piezo|drain_piezo|wrain_piezo|mrain_piezo|yrain_piezo\", station=~\"$station\"}",
+          "expr": "ecowitt_rain{sensor=~\"rate|rrain_piezo\", station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{sensor}}",
+          "legendFormat": "Rain rate",
           "range": true,
           "refId": "A",
           "useBackend": false
         }
       ],
-      "title": "Rainfall",
+      "title": "Rain rate",
       "type": "timeseries"
     },
     {
@@ -2094,7 +2094,7 @@
                 "from": 337.5,
                 "result": {
                   "index": 0,
-                  "text": "↓"
+                  "text": "N"
                 },
                 "to": 360
               },
@@ -2105,7 +2105,7 @@
                 "from": 292.5,
                 "result": {
                   "index": 1,
-                  "text": "↘"
+                  "text": "NW"
                 },
                 "to": 337.5
               },
@@ -2116,7 +2116,7 @@
                 "from": 247.5,
                 "result": {
                   "index": 2,
-                  "text": "→"
+                  "text": "W"
                 },
                 "to": 292.5
               },
@@ -2127,7 +2127,7 @@
                 "from": 202.5,
                 "result": {
                   "index": 3,
-                  "text": "↗"
+                  "text": "SW"
                 },
                 "to": 247.5
               },
@@ -2138,7 +2138,7 @@
                 "from": 157.5,
                 "result": {
                   "index": 4,
-                  "text": "↑"
+                  "text": "S"
                 },
                 "to": 202.5
               },
@@ -2149,7 +2149,7 @@
                 "from": 112.5,
                 "result": {
                   "index": 5,
-                  "text": "↖"
+                  "text": "SE"
                 },
                 "to": 157.5
               },
@@ -2160,7 +2160,7 @@
                 "from": 77.5,
                 "result": {
                   "index": 6,
-                  "text": "←"
+                  "text": "E"
                 },
                 "to": 112.5
               },
@@ -2171,7 +2171,7 @@
                 "from": 22.5,
                 "result": {
                   "index": 7,
-                  "text": "↙"
+                  "text": "NE"
                 },
                 "to": 77.5
               },
@@ -2182,7 +2182,7 @@
                 "from": 0,
                 "result": {
                   "index": 8,
-                  "text": "↓"
+                  "text": "N"
                 },
                 "to": 22.5
               },
@@ -2242,8 +2242,8 @@
           "expr": "ecowitt_winddir{station=~\"$station\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "instant": false,
-          "range": true,
+          "instant": true,
+          "range": false,
           "refId": "A",
           "useBackend": false
         }
@@ -2275,66 +2275,8 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "11": {
-                  "color": "dark-purple",
-                  "index": 0,
-                  "text": "Extreme"
-                }
-              },
-              "type": "value"
-            },
-            {
-              "options": {
-                "from": 0,
-                "result": {
-                  "color": "green",
-                  "index": 1,
-                  "text": "Low"
-                },
-                "to": 2
-              },
-              "type": "range"
-            },
-            {
-              "options": {
-                "from": 3,
-                "result": {
-                  "color": "yellow",
-                  "index": 2,
-                  "text": "Moderate"
-                },
-                "to": 5
-              },
-              "type": "range"
-            },
-            {
-              "options": {
-                "from": 6,
-                "result": {
-                  "color": "orange",
-                  "index": 3,
-                  "text": "High"
-                },
-                "to": 7
-              },
-              "type": "range"
-            },
-            {
-              "options": {
-                "from": 8,
-                "result": {
-                  "color": "red",
-                  "index": 4,
-                  "text": "Very High"
-                },
-                "to": 10
-              },
-              "type": "range"
-            }
-          ],
+          "decimals": 0,
+          "mappings": [],
           "max": 12,
           "min": 0,
           "noValue": "0",
@@ -2404,7 +2346,8 @@
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "UV index",
-          "range": true,
+          "instant": true,
+          "range": false,
           "refId": "A",
           "useBackend": false
         }
@@ -2576,7 +2519,8 @@
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
-              "range": true,
+              "instant": true,
+              "range": false,
               "refId": "A",
               "useBackend": false,
               "datasource": {
@@ -2645,7 +2589,8 @@
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
-              "range": true,
+              "instant": true,
+              "range": false,
               "refId": "A",
               "useBackend": false,
               "datasource": {
@@ -2716,7 +2661,8 @@
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
-              "range": true,
+              "instant": true,
+              "range": false,
               "refId": "A",
               "useBackend": false,
               "datasource": {
@@ -2786,7 +2732,8 @@
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "{{sensor}}",
-              "range": true,
+              "instant": true,
+              "range": false,
               "refId": "A",
               "useBackend": false,
               "datasource": {
