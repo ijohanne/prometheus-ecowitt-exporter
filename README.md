@@ -168,6 +168,8 @@ units and enabled features. The dashboard reads these as hidden template variabl
 
 **NixOS**: When using `enableGrafanaDashboard`, panel display units are automatically
 matched to your configured units (e.g. `windUnit = "kmh"` sets wind panels to km/h).
+Optional sensor rows are also expanded automatically when their matching
+`enable*` option is turned on.
 
 **Non-Nix**: The base dashboard uses metric/SI defaults (°C, hPa, km/h, mm, km, W/m²).
 If your exporter uses different units, edit the dashboard JSON panel units to match.
